@@ -108,6 +108,7 @@ resource "aws_instance" "default" {
   )
   
   ebs_block_device {
+    device_name           = var.ebs_device_name
     volume_size           = var.ebs_volume_size
     iops                  = local.ebs_iops
     volume_type           = var.ebs_volume_type
