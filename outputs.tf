@@ -48,11 +48,6 @@ output "role" {
   value       = var.iam_profile_name
 }
 
-output "alarm" {
-  description = "CloudWatch Alarm ID"
-  value       = join("", aws_cloudwatch_metric_alarm.default.*.id)
-}
-
 output "additional_eni_ids" {
   description = "Map of ENI to EIP"
   value = zipmap(
