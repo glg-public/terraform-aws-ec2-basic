@@ -107,13 +107,16 @@ resource "aws_instance" "default" {
     )
   )
   
-  ebs_block_device {
-    device_name           = var.ebs_device_name
-    volume_size           = var.ebs_volume_size
-    iops                  = local.ebs_iops
-    volume_type           = var.ebs_volume_type
-    delete_on_termination = var.delete_on_termination
-  }
+  # dynamic "ebs_block_device" {
+  #   for_each = iterator
+  #   content{
+  #     device_name           = var.ebs_device_name
+  #     volume_size           = var.ebs_volume_size
+  #     iops                  = local.ebs_iops
+  #     volume_type           = var.ebs_volume_type
+  #     delete_on_termination = var.delete_on_termination
+  #   }
+  # }
   
   root_block_device {
     volume_type           = local.root_volume_type
