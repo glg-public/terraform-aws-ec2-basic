@@ -78,7 +78,6 @@ module "label" {
   enabled     = var.instance_enabled
   tags        = var.tags
 }
-variable "iam_profile_name" {}
 
 resource "aws_instance" "default" {
   count                       = local.instance_count
