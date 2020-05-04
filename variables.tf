@@ -283,7 +283,7 @@ variable "permissions_boundary_arn" {
 }
 
 variable "iam_profile_name" {
-  type = string
+  type        = string
   description = "The IAM Instance Profile to launch the instance with. Specified as the name of the Instance Profile"
-  default = ""
+  default     = ""
 }
