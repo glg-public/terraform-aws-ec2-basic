@@ -78,7 +78,6 @@ module "label" {
   enabled     = var.instance_enabled
   tags        = var.tags
 }
-variable "iam_profile_name" {}
 
 resource "aws_instance" "default" {
   count                       = local.instance_count
@@ -106,7 +105,7 @@ resource "aws_instance" "default" {
       var.security_groups
     )
   )
-  
+
   # dynamic "ebs_block_device" {
   #   for_each = iterator
   #   content{
@@ -117,7 +116,7 @@ resource "aws_instance" "default" {
   #     delete_on_termination = var.delete_on_termination
   #   }
   # }
-  
+
   root_block_device {
     volume_type           = local.root_volume_type
     volume_size           = var.root_volume_size

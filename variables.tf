@@ -281,3 +281,9 @@ variable "permissions_boundary_arn" {
   description = "Policy ARN to attach to instance role as a permissions boundary"
   default     = ""
 }
+
+variable "iam_profile_name" {
+  type        = string
+  description = "The IAM Instance Profile to launch the instance with. Specified as the name of the Instance Profile"
+  default     = ""
+}
