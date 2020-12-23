@@ -177,6 +177,7 @@ variable "root_iops" {
 variable "ebs_device_name" {
   type        = string
   description = "Name of the EBS device to mount"
+  default     = ""
 }
 
 variable "ebs_volume_type" {
@@ -194,12 +195,6 @@ variable "ebs_volume_size" {
 variable "ebs_iops" {
   type        = number
   description = "Amount of provisioned IOPS. This must be set with a volume_type of io1"
-  default     = 0
-}
-
-variable "ebs_volume_count" {
-  type        = number
-  description = "Count of EBS volumes that will be attached to the instance"
   default     = 0
 }
 
