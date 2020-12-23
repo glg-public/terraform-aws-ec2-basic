@@ -282,6 +282,12 @@ variable "permissions_boundary_arn" {
   default     = ""
 }
 
+variable "iam_profile_name" {
+  type        = string
+  description = "The IAM Instance Profile to launch the instance with. Specified as the name of the Instance Profile"
+  default     = ""
+}
+
 variable "root_volume_encrypted" {
   type        = bool
   description = "Whether the root volume should be encrypted on creation"
