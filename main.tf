@@ -112,6 +112,7 @@ resource "aws_instance" "default" {
     volume_size           = var.ebs_volume_size
     iops                  = local.ebs_iops
     volume_type           = var.ebs_volume_type
+    encrypted             = var.ebs_volume_encrypted
     delete_on_termination = var.delete_on_termination
   }
   
@@ -119,6 +120,7 @@ resource "aws_instance" "default" {
     volume_type           = local.root_volume_type
     volume_size           = var.root_volume_size
     iops                  = local.root_iops
+    encrypted             = var.root_volume_encrypted
     delete_on_termination = var.delete_on_termination
   }
 

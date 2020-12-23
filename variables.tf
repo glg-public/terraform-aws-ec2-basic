@@ -286,3 +286,15 @@ variable "permissions_boundary_arn" {
   description = "Policy ARN to attach to instance role as a permissions boundary"
   default     = ""
 }
+
+variable "root_volume_encrypted" {
+  type        = bool
+  description = "Whether the root volume should be encrypted on creation"
+  default     = false
+}
+
+variable "ebs_volume_encrypted" {
+  type        = bool
+  description = "Whether the ebs volume should be encrypted on creation"
+  default     = false
+}
