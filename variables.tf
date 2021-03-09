@@ -287,3 +287,9 @@ variable "iam_profile_name" {
   description = "The IAM Instance Profile to launch the instance with. Specified as the name of the Instance Profile"
   default     = ""
 }
+
+variable "root_block_device_encryption" {
+  type        = bool
+  description = "Whether to enable root block device encryption"
+  default     = true
+}

@@ -118,6 +118,7 @@ resource "aws_instance" "default" {
   # }
 
   root_block_device {
+    encrypted             = var.root_block_device_encryption
     volume_type           = local.root_volume_type
     volume_size           = var.root_volume_size
     iops                  = local.root_iops
