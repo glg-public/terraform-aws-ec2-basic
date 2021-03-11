@@ -2,7 +2,6 @@ locals {
   instance_count       = var.instance_enabled ? 1 : 0
   security_group_count = var.create_default_security_group ? 1 : 0
   region               = var.region != "" ? var.region : data.aws_region.default.name
-  root_iops            = var.root_volume_type == "io1" ? var.root_iops : "0"
   ebs_iops             = var.ebs_volume_type == "io1" ? var.ebs_iops : "0"
   availability_zone    = var.availability_zone != "" ? var.availability_zone : data.aws_subnet.default.availability_zone
   ami                  = var.ami != "" ? var.ami : join("", data.aws_ami.default.*.image_id)
@@ -110,7 +109,7 @@ resource "aws_instance" "default" {
     encrypted             = var.root_block_device_encryption
     volume_type           = local.root_volume_type
     volume_size           = var.root_volume_size
-    iops                  = local.root_iops
+    iops                  = var.root_iops
     delete_on_termination = var.delete_on_termination
   }
 
