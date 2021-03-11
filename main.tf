@@ -106,18 +106,8 @@ resource "aws_instance" "default" {
     )
   )
 
-  # dynamic "ebs_block_device" {
-  #   for_each = iterator
-  #   content{
-  #     device_name           = var.ebs_device_name
-  #     volume_size           = var.ebs_volume_size
-  #     iops                  = local.ebs_iops
-  #     volume_type           = var.ebs_volume_type
-  #     delete_on_termination = var.delete_on_termination
-  #   }
-  # }
-
   root_block_device {
+    encrypted             = var.root_block_device_encryption
     volume_type           = local.root_volume_type
     volume_size           = var.root_volume_size
     iops                  = local.root_iops
@@ -138,4 +128,22 @@ data "null_data_source" "eip" {
   inputs = {
     public_dns = "ec2-${replace(join("", aws_eip.default.*.public_ip), ".", "-")}.${local.region == "us-east-1" ? "compute-1" : "${local.region}.compute"}.amazonaws.com"
   }
+}
+
+resource "aws_ebs_volume" "default" {
+  count             = var.ebs_volume_count
+  availability_zone = local.availability_zone
+  size              = var.ebs_volume_size
+  iops              = local.ebs_iops
+  type              = var.ebs_volume_type
+  tags              = module.label.tags
+  encrypted         = var.ebs_volume_encrypted
+  kms_key_id        = var.kms_key_id
+}
+
+resource "aws_volume_attachment" "default" {
+  count       = var.ebs_volume_count
+  device_name = var.ebs_device_name[count.index]
+  volume_id   = aws_ebs_volume.default.*.id[count.index]
+  instance_id = join("", aws_instance.default.*.id)
 }

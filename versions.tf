@@ -2,7 +2,11 @@ terraform {
   required_version = "~> 0.12.0"
 
   required_providers {
-    aws  = "~> 2.0"
-    null = "~> 2.0"
+    aws = {
+      version = ">= 2.0"
+    }
+    null = {
+      version = ">= 2.0"
+    }
   }
 }

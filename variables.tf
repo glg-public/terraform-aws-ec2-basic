@@ -174,16 +174,46 @@ variable "root_iops" {
   default     = 0
 }
 
-variable "ebs_device_name" {
+variable "root_block_device_encryption" {
+  type        = bool
+  description = "Whether to enable root block device encryption"
+  default     = true
+}
+
+variable "ebs_volume_count" {
+  type        = number
+  description = "Count of EBS volumes that will be attached to the instance"
+  default     = 0
+}
+
+variable "ebs_volume_encrypted" {
+  type        = bool
+  description = "Whether EVS volumes should be encrypted"
+  default     = true
+}
+
+variable "kms_key_id" {
   type        = string
+  default     = null
+  description = "KMS key ID used to encrypt EBS volume. When specifying kms_key_id, ebs_volume_encrypted needs to be set to true"
+}
+
+variable "ebs_device_name" {
+  type        = list(string)
   description = "Name of the EBS device to mount"
-  default     = ""
+  default     = ["/dev/xvdb", "/dev/xvdc", "/dev/xvdd", "/dev/xvde", "/dev/xvdf", "/dev/xvdg", "/dev/xvdh", "/dev/xvdi", "/dev/xvdj", "/dev/xvdk", "/dev/xvdl", "/dev/xvdm", "/dev/xvdn", "/dev/xvdo", "/dev/xvdp", "/dev/xvdq", "/dev/xvdr", "/dev/xvds", "/dev/xvdt", "/dev/xvdu", "/dev/xvdv", "/dev/xvdw", "/dev/xvdx", "/dev/xvdy", "/dev/xvdz"]
 }
 
 variable "ebs_volume_type" {
   type        = string
-  description = "The type of EBS volume. Can be standard, gp2 or io1"
-  default     = "gp2"
+  description = "The type of EBS volume. Can be standard, gp2, gp3, io1, io2, sc1 or st1"
+  default     = "gp3"
+}
+
+variable "ebs_throughput" {
+  type        = string
+  description = "The throughput that the volume supports, in MiB/s. Only valid for type of gp3."
+  default     = null
 }
 
 variable "ebs_volume_size" {

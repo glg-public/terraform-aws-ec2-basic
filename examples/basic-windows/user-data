@@ -1,0 +1,8 @@
+<powershell>
+# grab instance ID to pass to SSM
+$instanceId=Invoke-RestMethod -Uri http://169.254.169.254/latest/meta-data/instance-id
+$Name = (Get-EC2Tag | ` Where-Object {$_.ResourceId -eq $instanceId -and $_.Key -eq 'Name'}).Value
+
+# Start-SSMAutomationExecution -DocumentName "document" -Parameter @{"ThisDCNetBIOSName"="$Name"}
+
+</powershell>
