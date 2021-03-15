@@ -4,9 +4,6 @@ locals {
   region               = var.region != "" ? var.region : data.aws_region.default.name
   ebs_iops             = var.ebs_volume_type == "io1" ? var.ebs_iops : "0"
   availability_zone    = var.availability_zone != "" ? var.availability_zone : data.aws_subnet.default.availability_zone
-  ami                  = var.ami != "" ? var.ami : join("", data.aws_ami.default.*.image_id)
-  ami_owner            = var.ami != "" ? var.ami_owner : join("", data.aws_ami.default.*.owner_id)
-  root_volume_type     = var.root_volume_type != "" ? var.root_volume_type : data.aws_ami.info.root_device_type
   public_dns           = var.associate_public_ip_address && var.assign_eip_address && var.instance_enabled ? data.null_data_source.eip.outputs["public_dns"] : join("", aws_instance.default.*.public_dns)
 }
 
@@ -40,32 +37,6 @@ data "aws_iam_policy_document" "default" {
   }
 }
 
-data "aws_ami" "default" {
-  count       = var.ami == "" ? 1 : 0
-  most_recent = "true"
-
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  owners = ["099720109477"]
-}
-
-data "aws_ami" "info" {
-  filter {
-    name   = "image-id"
-    values = [local.ami]
-  }
-
-  owners = [local.ami_owner]
-}
-
 module "label" {
   source      = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.16.0"
   namespace   = var.namespace
@@ -80,7 +51,7 @@ module "label" {
 
 resource "aws_instance" "default" {
   count                       = local.instance_count
-  ami                         = local.ami
+  ami                         = var.ami
   availability_zone           = local.availability_zone
   instance_type               = var.instance_type
   ebs_optimized               = var.ebs_optimized
@@ -107,7 +78,7 @@ resource "aws_instance" "default" {
 
   root_block_device {
     encrypted             = var.root_block_device_encryption
-    volume_type           = local.root_volume_type
+    volume_type           = var.root_volume_type
     volume_size           = var.root_volume_size
     iops                  = var.root_iops
     delete_on_termination = var.delete_on_termination
