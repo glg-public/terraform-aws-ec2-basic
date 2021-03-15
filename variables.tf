@@ -104,14 +104,7 @@ variable "availability_zone" {
 
 variable "ami" {
   type        = string
-  description = "The AMI to use for the instance. By default it is the AMI provided by Amazon with Ubuntu 16.04"
-  default     = ""
-}
-
-variable "ami_owner" {
-  type        = string
-  description = "Owner of the given AMI (ignored if `ami` unset)"
-  default     = ""
+  description = "The AMI to use for the instance."
 }
 
 variable "ebs_optimized" {

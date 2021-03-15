@@ -45,4 +45,5 @@ module "ec2_instance" {
   associate_public_ip_address = var.associate_public_ip_address
   instance_type               = var.instance_type
   allowed_ports               = var.allowed_ports
+  ami                         = var.ami
 }

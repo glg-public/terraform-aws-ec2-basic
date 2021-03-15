@@ -41,7 +41,6 @@ module "some_windows_server" {
   source                        = "../../"
   instance_type                 = "t3.2xlarge"
   ami                           = "ami-07dcc3822b6f2bdbe" #Windows 2016 Base
-  ami_owner                     = "801119661308"
   security_groups               = [aws_security_group.servers.id]
   delete_on_termination         = true
   ssh_key_pair                  = "prototype"
