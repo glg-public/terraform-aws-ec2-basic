@@ -28,6 +28,11 @@ output "name" {
   value       = module.label.id
 }
 
+output "arn" {
+  description = "Instance arn"
+  value       = aws_instance.default.arn
+}
+
 output "ssh_key_pair" {
   description = "Name of the SSH key pair provisioned on the instance"
   value       = var.ssh_key_pair
