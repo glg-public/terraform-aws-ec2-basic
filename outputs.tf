@@ -30,7 +30,7 @@ output "name" {
 
 output "arn" {
   description = "Instance arn"
-  value       = aws_instance.default.arn
+  value       = var.instance_enabled ? aws_instance.default[0].arn : ""
 }
 
 output "ssh_key_pair" {
