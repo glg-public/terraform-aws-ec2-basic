@@ -284,7 +284,7 @@ variable "default_alarm_action" {
 variable "create_default_security_group" {
   type        = bool
   description = "Create default Security Group with only Egress traffic allowed"
-  default     = true
+  default     = false
 }
 
 variable "instance_enabled" {
