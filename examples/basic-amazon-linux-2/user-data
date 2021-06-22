@@ -6,11 +6,14 @@ set -x
 ## Prep the machine and get it updated
 ########################################################################
 yum update -y
-yum install -y curl git jq snap unzip
-amazon-linux-extras install docker
+yum install -y curl git jq unzip
+
+# install Docker https://docs.aws.amazon.com/AmazonECS/latest/developerguide/docker-basics.html
+amazon-linux-extras install docker -y
 service docker start
 usermod -a -G docker ec2-user
 
+# install docker-compose
 curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 docker-compose version
@@ -21,6 +24,6 @@ pushd /tmp
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
 unzip awscliv2.zip
 rm /usr/bin/aws
-ln -s /usr/local/bin/aws /usr/bin/aws
 ./aws/install
+aws --version
 popd

@@ -1,6 +1,7 @@
 provider "aws" {
   version = "3.45.0"
   region  = "us-east-1"
+  // TODO: https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block
 }
 
 terraform {
@@ -81,7 +82,7 @@ module "some_amazon_linux_server" {
   stage                       = "test"
   root_volume_size            = 100
   root_volume_type            = "gp3"
-  # user_data                     = data.template_file.user_data.rendered
+  user_data                     = data.template_file.user_data.rendered
   iam_profile_name        = aws_iam_instance_profile.default.name
   monitoring              = false
   vpc_id                  = data.aws_vpc.primary.id
