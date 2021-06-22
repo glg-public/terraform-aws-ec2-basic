@@ -71,26 +71,25 @@ module "some_amazon_linux_server" {
     },
   )
 
-  # no need to change these:
-  source                = "../../"
-  instance_type         = "t3.micro"
-  ami                   = "ami-0aeeebd8d2ab47354" // Amazon Linux 2
-  security_groups       = [aws_security_group.servers.id]
-  delete_on_termination = true
+  source                      = "../../"
+  instance_type               = "t3.micro"
+  ami                         = "ami-0aeeebd8d2ab47354" // Amazon Linux 2
+  security_groups             = [aws_security_group.servers.id]
+  delete_on_termination       = true
   associate_public_ip_address = true # needed for SSM!
   namespace                   = "glg"
   stage                       = "test"
   root_volume_size            = 100
   root_volume_type            = "gp3"
-  user_data                     = data.template_file.user_data.rendered
-  iam_profile_name        = aws_iam_instance_profile.default.name
-  monitoring              = false
-  vpc_id                  = data.aws_vpc.primary.id
-  assign_eip_address      = false
-  disable_api_termination = false # Disables "Termination Protection" in the GUI
-  ebs_volume_count        = 2    # creates two additional EBS volumes
-  ebs_volume_size         = 10
-  ebs_device_name         = ["/dev/xvdb", "/dev/xvdc"] # map first two drives on Linux machine
+  user_data                   = data.template_file.user_data.rendered
+  iam_profile_name            = aws_iam_instance_profile.default.name
+  monitoring                  = false
+  vpc_id                      = data.aws_vpc.primary.id
+  assign_eip_address          = false
+  disable_api_termination     = false # Disables "Termination Protection" in the GUI
+  ebs_volume_count            = 2     # creates two additional EBS volumes
+  ebs_volume_size             = 10
+  ebs_device_name             = ["/dev/xvdb", "/dev/xvdc"] # map first two drives on Linux machine
 }
 
 resource "aws_security_group" "servers" {
