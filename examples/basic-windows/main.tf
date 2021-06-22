@@ -4,11 +4,11 @@ provider "aws" {
 }
 
 terraform {
-  required_version = "0.12.26"
+  required_version = "0.12.31"
 }
 
 locals {
-  vpc_id = "vpc-0e0e0e0"
+  vpc_id = "vpc-0e0e0e0" //replace with your own value
   default_tags = {
     "BusinessUnit" = "Engineering"
     "Environment"  = "Production"
