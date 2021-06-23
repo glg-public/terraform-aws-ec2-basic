@@ -1,7 +1,6 @@
 provider "aws" {
   version = "3.45.0"
   region  = "us-east-1"
-  // TODO: https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block
 }
 
 terraform {
@@ -61,7 +60,7 @@ module "some_amazon_linux_server" {
   # unique per server:
   region            = "us-east-1"
   availability_zone = "us-east-1c"
-  subnet            = "subnet-040e45674852ac2c7" //TODO: change to subnet-0e0e0e0 before comit
+  subnet            = "subnet-0e0e0e0"
   name              = "something-descriptive"
   tags = merge(
     local.default_tags,
