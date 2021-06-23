@@ -8,6 +8,7 @@ terraform {
 }
 
 locals {
+  name_prefix = "serviceX-"
   default_tags = {
     "BusinessUnit" = "Engineering"
     "Environment"  = "Production"
@@ -31,14 +32,14 @@ data "aws_vpc" "primary" {
 
 // Role to assume the ec2 service - required for ec2 instances and IAM
 resource "aws_iam_role" "default" {
-  name_prefix        = "serviceX-"
+  name_prefix        = local.name_prefix
   assume_role_policy = file("${path.module}/policies/assume-role.json")
   tags               = local.default_tags
 }
 
 // Inline policy that allows instance to perform tasks we define
 resource "aws_iam_role_policy" "default" {
-  name_prefix = "serviceX-role-"
+  name_prefix = local.name_prefix
   policy      = file("${path.module}/policies/serviceX-role.json")
   role        = aws_iam_role.default.id
 }
@@ -51,7 +52,7 @@ resource "aws_iam_role_policy_attachment" "default" {
 
 // A profile is a role container
 resource "aws_iam_instance_profile" "default" {
-  name_prefix = "serviceX-"
+  name_prefix = local.name_prefix
   role        = aws_iam_role.default.name
   tags        = local.default_tags
 }
