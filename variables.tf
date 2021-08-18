@@ -1,6 +1,7 @@
 variable "ssh_key_pair" {
   type        = string
   description = "SSH key pair to be provisioned on the instance"
+  default     = null
 }
 
 variable "associate_public_ip_address" {
@@ -284,7 +285,7 @@ variable "default_alarm_action" {
 variable "create_default_security_group" {
   type        = bool
   description = "Create default Security Group with only Egress traffic allowed"
-  default     = true
+  default     = false
 }
 
 variable "instance_enabled" {
