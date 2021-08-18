@@ -8,7 +8,6 @@ terraform {
 }
 
 locals {
-  vpc_id = "vpc-0e0e0e0" //replace with your own value
   default_tags = {
     "BusinessUnit" = "Engineering"
     "Environment"  = "Production"
@@ -21,6 +20,13 @@ locals {
 
 data "template_file" "user_data" {
   template = file("${path.module}/user-data")
+}
+
+// clever tag to set on your non-default VPC
+data "aws_vpc" "primary" {
+  tags = {
+    is_glg_default = "true"
+  }
 }
 
 module "some_windows_server" {
@@ -52,7 +58,7 @@ module "some_windows_server" {
   user_data                     = data.template_file.user_data.rendered
   iam_profile_name              = aws_iam_instance_profile.test_profile.name
   monitoring                    = false
-  vpc_id                        = local.vpc_id
+  vpc_id                        = data.aws_vpc.primary.id
   create_default_security_group = false
   assign_eip_address            = false
   disable_api_termination       = true # Enables "Termination Protection" in the GUI
@@ -64,7 +70,7 @@ module "some_windows_server" {
 resource "aws_security_group" "servers" {
   name        = "Servers"
   description = "Servers Security Group"
-  vpc_id      = local.vpc_id
+  vpc_id      = data.aws_vpc.primary.id
 
   ingress {
     description = "Cloud traffic from AWS CIDR ranges"
