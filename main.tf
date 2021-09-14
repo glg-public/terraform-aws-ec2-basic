@@ -4,7 +4,14 @@ locals {
   region               = var.region != "" ? var.region : data.aws_region.default.name
   ebs_iops             = var.ebs_volume_type == "io1" ? var.ebs_iops : "0"
   availability_zone    = var.availability_zone != "" ? var.availability_zone : data.aws_subnet.default.availability_zone
-  public_dns           = var.associate_public_ip_address && var.assign_eip_address && var.instance_enabled ? data.null_data_source.eip.outputs["public_dns"] : join("", aws_instance.default.*.public_dns)
+  computed_dns         = "ec2-${replace(join("", aws_eip.default.*.public_ip), ".", "-")}.${local.region == "us-east-1" ? "compute-1" : "${local.region}.compute"}.amazonaws.com"
+  public_dns = (
+    var.associate_public_ip_address
+    && var.assign_eip_address
+    && var.instance_enabled
+    ? local.computed_dns # TODO; Ask about why this was done
+    : join("", aws_instance.default.*.public_dns)
+  )
 }
 
 data "aws_caller_identity" "default" {
@@ -94,11 +101,6 @@ resource "aws_eip" "default" {
   tags              = module.label.tags
 }
 
-data "null_data_source" "eip" {
-  inputs = {
-    public_dns = "ec2-${replace(join("", aws_eip.default.*.public_ip), ".", "-")}.${local.region == "us-east-1" ? "compute-1" : "${local.region}.compute"}.amazonaws.com"
-  }
-}
 
 resource "aws_ebs_volume" "default" {
   count             = var.ebs_volume_count
