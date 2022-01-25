@@ -9,7 +9,7 @@ locals {
     var.associate_public_ip_address
     && var.assign_eip_address
     && var.instance_enabled
-    ? local.computed_dns # TODO; Ask about why this was done
+    ? local.computed_dns
     : join("", aws_instance.default.*.public_dns)
   )
 }
@@ -92,6 +92,17 @@ resource "aws_instance" "default" {
   }
 
   tags = module.label.tags
+
+  lifecycle {
+    # Prevent changes to the ami (due to use of data.aws_ami for example)
+    # from accidentally re-creating the instance.
+    # Also ignore changes to user_data, to not implicitly delete the instance
+    # because additional info was added to user_data at a later point
+    ignore_changes = [
+      ami,
+      user_data,
+    ]
+  }
 }
 
 resource "aws_eip" "default" {

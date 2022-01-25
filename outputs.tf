@@ -60,3 +60,8 @@ output "primary_network_interface_id" {
   description = "ID of the instance's primary network interface"
   value       = join("", aws_instance.default.*.primary_network_interface_id)
 }
+
+output "ami" {
+  value       = join("", aws_instance.default.*.ami)
+  description = "The AMI used to create the EC2 instance"
+}
