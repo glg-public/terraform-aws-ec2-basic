@@ -317,3 +317,9 @@ variable "credit_specification" {
   description = "null, standard or unlimited (set if needed)"
   default     = null
 }
+
+variable "ignore_instance_type" {
+  type        = string
+  description = "set to true, if you expect the instance type to change over the life of the instance"
+  default     = false
+}

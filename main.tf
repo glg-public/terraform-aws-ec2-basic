@@ -1,5 +1,7 @@
 locals {
-  instance_count       = var.instance_enabled ? 1 : 0
+  instance_count             = (var.instance_enabled && !var.ignore_instance_type) ? 1 : 0
+  instance_count_ignore_type = (var.instance_enabled && var.ignore_instance_type) ? 1 : 0
+
   security_group_count = var.create_default_security_group ? 1 : 0
   region               = var.region != "" ? var.region : data.aws_region.default.name
   ebs_iops             = var.ebs_volume_type == "io1" ? var.ebs_iops : "0"
@@ -102,6 +104,7 @@ resource "aws_instance" "default" {
       ami,
       user_data,
       ebs_optimized,
+      "instance_type",
     ]
   }
 
