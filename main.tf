@@ -103,6 +103,7 @@ resource "aws_instance" "default" {
       ami,
       user_data,
       ebs_optimized,
+      instance_type,
     ]
   }
 
