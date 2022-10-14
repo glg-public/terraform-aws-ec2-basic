@@ -311,3 +311,9 @@ variable "iam_profile_name" {
   description = "The IAM Instance Profile to launch the instance with. Specified as the name of the Instance Profile"
   default     = ""
 }
+
+variable "credit_specification" {
+  type        = string
+  description = "null, standard or unlimited (set if needed)"
+  default     = null
+}

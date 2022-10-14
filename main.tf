@@ -101,8 +101,20 @@ resource "aws_instance" "default" {
     ignore_changes = [
       ami,
       user_data,
+      ebs_optimized,
     ]
   }
+
+  dynamic "credit_specification" {
+    for_each = local.credit_specification
+    content {
+      cpu_credits = credit_specification.value
+    }
+  }
+}
+
+locals {
+  credit_specification = (var.credit_specification == null) ? [] : [var.credit_specification]
 }
 
 resource "aws_eip" "default" {
