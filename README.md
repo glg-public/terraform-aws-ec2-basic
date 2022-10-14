@@ -19,3 +19,6 @@ following changes will be ignored:
   - `user_data`
   - `ebs_optimized`
   - `instance_type`
+
+If you really want an instance destroyed as part of an apply, use `terraform taint` to taint
+the desired `aws_instance` resource.
