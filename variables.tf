@@ -312,6 +312,6 @@ variable "iam_profile_name" {
 }
 
 variable "additional_informatin" {
-  type    = list(any)
+  type    = list(object({}))
   default = {}
 }
