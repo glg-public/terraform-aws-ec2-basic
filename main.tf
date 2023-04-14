@@ -5,16 +5,17 @@ locals {
   ebs_iops             = var.ebs_volume_type == "io1" ? var.ebs_iops : "0"
   availability_zone    = var.availability_zone != "" ? var.availability_zone : data.aws_subnet.default.availability_zone
   public_dns           = var.associate_public_ip_address && var.assign_eip_address && var.instance_enabled ? data.null_data_source.eip.outputs["public_dns"] : join("", aws_instance.default.*.public_dns)
+  instance_name        = "${var.stage}${var.delimiter} ${var.name}"
 
   instance_tags = {
-    Name            = "${var.stage}${var.delimiter} ${var.name}"
+    Name            = local.instance_name
     AlertLogic      = "Install"
     Rapid7          = "Install"
     SpendAllocation = var.additional_informatin["instance"]
   }
 
   disk_tags = {
-    Name            = "${var.stage}${var.delimiter} ${var.name}"
+    Name            = local.instance_name
     AlertLogic      = "Install"
     Rapid7          = "Install"
     SpendAllocation = var.additional_informatin["disk"]

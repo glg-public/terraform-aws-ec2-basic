@@ -25,7 +25,7 @@ output "id" {
 
 output "name" {
   description = "Instance name"
-  value       = module.label.id
+  value       = local.instance_name
 }
 
 output "ssh_key_pair" {

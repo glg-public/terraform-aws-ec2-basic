@@ -15,7 +15,7 @@ resource "aws_network_interface" "additional" {
     )
   )
 
-  tags = module.label.tags
+  tags = merge(local.instance_tags, var.tags)
 }
 
 resource "aws_network_interface_attachment" "additional" {
