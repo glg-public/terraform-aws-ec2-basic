@@ -15,9 +15,6 @@ locals {
   }
 
   disk_tags = {
-    Name            = local.instance_name
-    AlertLogic      = "Install"
-    Rapid7          = "Install"
     SpendAllocation = var.additional_informatin["disk"]
   }
 }
