@@ -5,39 +5,21 @@ locals {
   ebs_iops             = var.ebs_volume_type == "io1" ? var.ebs_iops : "0"
   availability_zone    = var.availability_zone != "" ? var.availability_zone : data.aws_subnet.default.availability_zone
   public_dns           = var.associate_public_ip_address && var.assign_eip_address && var.instance_enabled ? data.null_data_source.eip.outputs["public_dns"] : join("", aws_instance.default.*.public_dns)
-}
 
-module "label" {
-  source      = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.16.0"
-  namespace   = var.namespace        # ""
-  stage       = var.stage            # DEV-SQL
-  environment = var.environment      # ""
-  name        = var.name             # GP-TEST 
-  attributes  = var.attributes       # []
-  delimiter   = var.delimiter        # ": "
-  enabled     = var.instance_enabled # true 
-  tags        = var.tags             # local.default_tags
-}
-
-locals {
   instance_tags = {
     Name            = "${var.stage}${var.delimiter} ${var.name}"
     AlertLogic      = "Install"
     Rapid7          = "Install"
     SpendAllocation = var.additional_informatin["instance"]
   }
-}
 
-#default_tags = {
-#  "BusinessUnit"    = "Core Engineering"
-#  "Environment"     = "Development"
-#  "ManagedBy"       = "Terraform"
-#  "Owner"           = "DRE"
-#  "App"             = "Great Plains"
-#  "GitHub"          = "https://github.com/glg/metadevops-issues/issues/622"
-#  "Terraform"       = "https://github.com/glg/aws-infrastructure/tree/master/glgapp/dre/great-plains-sql-servers"
-#  "hostname"        = "IP-AC1B0594"
-#}
+  disk_tags = {
+    Name            = "${var.stage}${var.delimiter} ${var.name}"
+    AlertLogic      = "Install"
+    Rapid7          = "Install"
+    SpendAllocation = var.additional_informatin["disk"]
+  }
+}
 
 data "aws_caller_identity" "default" {
 }
@@ -102,6 +84,8 @@ resource "aws_instance" "default" {
     volume_size           = var.root_volume_size
     iops                  = var.root_iops
     delete_on_termination = var.delete_on_termination
+    tags                  = merge(local.disk_tags, var.tags)
+
   }
 
   tags = merge(local.instance_tags, var.tags)
@@ -111,7 +95,7 @@ resource "aws_eip" "default" {
   count             = var.associate_public_ip_address && var.assign_eip_address && var.instance_enabled ? 1 : 0
   network_interface = join("", aws_instance.default.*.primary_network_interface_id)
   vpc               = true
-  tags              = module.label.tags
+  tags              = merge(local.disk_tags, var.tags)
 }
 
 data "null_data_source" "eip" {
@@ -126,7 +110,7 @@ resource "aws_ebs_volume" "default" {
   size              = var.ebs_volume_size
   iops              = local.ebs_iops
   type              = var.ebs_volume_type
-  tags              = module.label.tags
+  tags              = merge(local.disk_tags, var.tags)
   encrypted         = var.ebs_volume_encrypted
   kms_key_id        = var.kms_key_id
 }
