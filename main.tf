@@ -7,6 +7,38 @@ locals {
   public_dns           = var.associate_public_ip_address && var.assign_eip_address && var.instance_enabled ? data.null_data_source.eip.outputs["public_dns"] : join("", aws_instance.default.*.public_dns)
 }
 
+module "label" {
+  source      = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.16.0"
+  namespace   = var.namespace        # ""
+  stage       = var.stage            # DEV-SQL
+  environment = var.environment      # ""
+  name        = var.name             # GP-TEST 
+  attributes  = var.attributes       # []
+  delimiter   = var.delimiter        # ": "
+  enabled     = var.instance_enabled # true 
+  tags        = var.tags             # local.default_tags
+}
+
+locals {
+  instance_tags = {
+    Name            = "${var.stage}${var.delimiter} ${var.name}"
+    AlertLogic      = "Install"
+    Rapid7          = "Install"
+    SpendAllocation = "Database Disk"
+  }
+}
+
+#default_tags = {
+#  "BusinessUnit"    = "Core Engineering"
+#  "Environment"     = "Development"
+#  "ManagedBy"       = "Terraform"
+#  "Owner"           = "DRE"
+#  "App"             = "Great Plains"
+#  "GitHub"          = "https://github.com/glg/metadevops-issues/issues/622"
+#  "Terraform"       = "https://github.com/glg/aws-infrastructure/tree/master/glgapp/dre/great-plains-sql-servers"
+#  "hostname"        = "IP-AC1B0594"
+#}
+
 data "aws_caller_identity" "default" {
 }
 
@@ -35,18 +67,6 @@ data "aws_iam_policy_document" "default" {
 
     effect = "Allow"
   }
-}
-
-module "label" {
-  source      = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.16.0"
-  namespace   = var.namespace
-  stage       = var.stage
-  environment = var.environment
-  name        = var.name
-  attributes  = var.attributes
-  delimiter   = var.delimiter
-  enabled     = var.instance_enabled
-  tags        = var.tags
 }
 
 resource "aws_instance" "default" {
@@ -84,7 +104,7 @@ resource "aws_instance" "default" {
     delete_on_termination = var.delete_on_termination
   }
 
-  tags = module.label.tags
+  tags = merge(local.instance_tags, var.tags)
 }
 
 resource "aws_eip" "default" {
