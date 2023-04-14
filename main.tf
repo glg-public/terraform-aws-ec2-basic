@@ -24,7 +24,7 @@ locals {
     Name            = "${var.stage}${var.delimiter} ${var.name}"
     AlertLogic      = "Install"
     Rapid7          = "Install"
-    SpendAllocation = var.additional_informatin.spend_allocation.instance
+    SpendAllocation = var.additional_informatin["instance"]
   }
 }
 
