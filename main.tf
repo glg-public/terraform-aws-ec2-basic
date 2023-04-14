@@ -24,7 +24,7 @@ locals {
     Name            = "${var.stage}${var.delimiter} ${var.name}"
     AlertLogic      = "Install"
     Rapid7          = "Install"
-    SpendAllocation = "Database Disk"
+    SpendAllocation = var.additional_informatin.spend_allocation.instance
   }
 }
 

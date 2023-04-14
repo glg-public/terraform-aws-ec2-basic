@@ -310,3 +310,8 @@ variable "iam_profile_name" {
   description = "The IAM Instance Profile to launch the instance with. Specified as the name of the Instance Profile"
   default     = ""
 }
+
+variable "additional_informatin" {
+  type    = list(any)
+  default = ""
+}
