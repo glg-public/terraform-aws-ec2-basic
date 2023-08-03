@@ -25,7 +25,7 @@ output "id" {
 
 output "name" {
   description = "Instance name"
-  value       = var.tags.name
+  value       = var.name
 }
 
 output "ssh_key_pair" {
