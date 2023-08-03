@@ -1,6 +1,6 @@
 resource "aws_security_group" "default" {
   count       = local.security_group_count
-  name        = module.label.id
+  name        = var.tags.name
   vpc_id      = var.vpc_id
   description = "Instance default security group (only egress access is allowed)"
   tags        = var.tags

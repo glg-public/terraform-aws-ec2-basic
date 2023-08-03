@@ -25,7 +25,7 @@ output "id" {
 
 output "name" {
   description = "Instance name"
-  value       = module.label.id
+  value       = var.tags.name
 }
 
 output "ssh_key_pair" {
