@@ -45,18 +45,6 @@ data "aws_iam_policy_document" "default" {
   }
 }
 
-module "label" {
-  source      = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.24.1"
-  namespace   = var.namespace
-  stage       = var.stage
-  environment = var.environment
-  name        = var.name
-  attributes  = var.attributes
-  delimiter   = var.delimiter
-  enabled     = var.instance_enabled
-  tags        = var.tags
-}
-
 resource "aws_instance" "default" {
   count                       = local.instance_count
   ami                         = var.ami
@@ -92,7 +80,7 @@ resource "aws_instance" "default" {
     delete_on_termination = var.delete_on_termination
   }
 
-  tags = module.label.tags
+  tags = var.tags
 
   lifecycle {
     # Prevent changes to the ami (due to use of data.aws_ami for example)
@@ -119,7 +107,7 @@ resource "aws_eip" "default" {
   count             = var.associate_public_ip_address && var.assign_eip_address && var.instance_enabled ? 1 : 0
   network_interface = join("", aws_instance.default.*.primary_network_interface_id)
   vpc               = true
-  tags              = module.label.tags
+  tags              = var.tags
 }
 
 
@@ -129,7 +117,7 @@ resource "aws_ebs_volume" "default" {
   size              = var.ebs_volume_size
   iops              = local.ebs_iops
   type              = var.ebs_volume_type
-  tags              = module.label.tags
+  tags              = var.tags
   encrypted         = var.ebs_volume_encrypted
   kms_key_id        = var.kms_key_id
 }

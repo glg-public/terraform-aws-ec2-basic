@@ -15,7 +15,7 @@ resource "aws_network_interface" "additional" {
     )
   )
 
-  tags = module.label.tags
+  tags = var.tags
 }
 
 resource "aws_network_interface_attachment" "additional" {
